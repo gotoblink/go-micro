@@ -163,22 +163,24 @@ func (s *rpcServer) ServeConn(sock transport.Socket) {
 
 		// Check the message header for micro message header, if so handle
 		// as micro event
-		if t := msg.Header[headers.Message]; len(t) > 0 {
-			// Process the event
-			ev := newEvent(msg)
-
-			if err := s.HandleEvent(ev); err != nil {
-				msg.Header[headers.Error] = err.Error()
-				logger.Logf(log.ErrorLevel, "failed to handle event: %v", err)
-			}
-			// Write back some 200
-			if err := sock.Send(&transport.Message{Header: msg.Header}); err != nil {
-				gerr = err
-				break
-			}
-
-			continue
-		}
+		// TODO: comment out for now to compatible with older version of go-micro
+		//
+		// if t := msg.Header[headers.Message]; len(t) > 0 {
+		// 	// Process the event
+		// 	ev := newEvent(msg)
+		//
+		// 	if err := s.HandleEvent(ev); err != nil {
+		// 		msg.Header[headers.Error] = err.Error()
+		// 		logger.Logf(log.ErrorLevel, "failed to handle event: %v", err)
+		// 	}
+		// 	// Write back some 200
+		// 	if err := sock.Send(&transport.Message{Header: msg.Header}); err != nil {
+		// 		gerr = err
+		// 		break
+		// 	}
+		//
+		// 	continue
+		// }
 
 		// business as usual
 
